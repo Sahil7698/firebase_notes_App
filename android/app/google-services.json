@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "999920583922",
+    "project_id": "authentication-88dc1",
+    "storage_bucket": "authentication-88dc1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999920583922:android:0acdbc11468d1bb0af7c6b",
+        "android_client_info": {
+          "package_name": "com.firebaseLR.firebase_note_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999920583922-ccba0luf5p4ad7v73reklqcu27gkvij9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV9u3zWqLcwE4s6Ou2A3d56Rg6Tirf290"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999920583922-ccba0luf5p4ad7v73reklqcu27gkvij9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
