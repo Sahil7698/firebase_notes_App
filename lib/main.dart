@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_note_app/view/screens/add_note.dart';
 import 'package:firebase_note_app/view/screens/home_page.dart';
 import 'package:firebase_note_app/view/screens/note_page.dart';
 import 'package:firebase_note_app/view/screens/registration_page.dart';
@@ -23,6 +24,7 @@ void main() async {
         'login_page': (context) => const HomePage(),
         'registration_page': (context) => const RegistrationPage(),
         'note_page': (context) => const NotePage(),
+        'add_note_page': (context) => const AddNotePage(),
       },
     ),
   );
@@ -54,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal.shade100,
+      backgroundColor: Colors.teal,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

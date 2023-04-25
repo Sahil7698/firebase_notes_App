@@ -224,7 +224,30 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 50, right: 50),
                         child: GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            User? user = await FirebaseAuthHelper
+                                .firebaseAuthHelper
+                                .guestLogin();
+
+                            if (user != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Log In Successfully..."),
+                                  backgroundColor: Colors.green,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                              Navigator.of(context)
+                                  .pushReplacementNamed('note_page');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Log In Failed..."),
+                                  backgroundColor: Colors.red,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
                             Navigator.of(context)
                                 .pushReplacementNamed('note_page');
                           },

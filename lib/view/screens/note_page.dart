@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_note_app/helpers/firebaseauth_helpers.dart';
+import 'package:firebase_note_app/helpers/firestore_helpers.dart';
+import 'package:firebase_note_app/view/screens/update_note.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,10 +19,13 @@ class _NotePageState extends State<NotePage> {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [
-            Color(0xff191654),
-            Color(0xff43C6AC),
-          ])),
+            gradient: LinearGradient(
+              colors: [
+                Color(0xff191654),
+                Color(0xff43C6AC),
+              ],
+            ),
+          ),
         ),
         backgroundColor: Colors.teal,
         title: Text(
@@ -46,10 +52,186 @@ class _NotePageState extends State<NotePage> {
           ),
         ],
       ),
-      body: const Center(),
+      body: StreamBuilder(
+        stream: FirestoreHelper.firestoreHelper.fetchRecords(),
+        builder: (context, snapShot) {
+          if (snapShot.hasError) {
+            return Center(
+              child: Text("Error : ${snapShot.data}"),
+            );
+          } else if (snapShot.hasData) {
+            QuerySnapshot<Map<String, dynamic>>? data = snapShot.data;
+
+            if (data == null) {
+              return const Center(
+                child: Text("No Data Here..."),
+              );
+            } else {
+              List<QueryDocumentSnapshot<Map<String, dynamic>>> allNotes =
+                  data.docs;
+
+              return GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 10,
+                children: List.generate(
+                  allNotes.length,
+                  (index) => Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: GestureDetector(
+                      onTap: () {
+                        Map<String, dynamic> updateData = {
+                          "title": allNotes[index].data()['title'],
+                          "description": allNotes[index].data()['description'],
+                        };
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UpdatePage(
+                                id: allNotes[index].id, data: updateData)));
+                      },
+                      child: Container(
+                        height: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              "${allNotes[index].data()['title']}",
+                              style: GoogleFonts.ubuntu(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              "${allNotes[index].data()['description']}",
+                              style: GoogleFonts.ubuntu(
+                                fontSize: 17,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ).toList(),
+              );
+            }
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+      // body: Container(
+      //   height: double.infinity,
+      //   width: double.infinity,
+      //   child: GridView.count(
+      //     crossAxisCount: 2,
+      //     crossAxisSpacing: 5,
+      //     mainAxisSpacing: 3,
+      //     children: [
+      //       Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Container(
+      //           height: 200,
+      //           width: 200,
+      //           decoration: BoxDecoration(
+      //             color: Colors.white,
+      //             borderRadius: BorderRadius.circular(15),
+      //           ),
+      //           child: Column(
+      //             children: [
+      //               Text(
+      //                 "Title",
+      //                 style: GoogleFonts.ubuntu(
+      //                   fontSize: 20,
+      //                   fontWeight: FontWeight.bold,
+      //                   color: Colors.grey,
+      //                 ),
+      //               ),
+      //               Text(
+      //                 "Note",
+      //                 style: GoogleFonts.ubuntu(
+      //                   fontSize: 15,
+      //                   color: Colors.grey,
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Container(
+      //           height: 200,
+      //           width: 200,
+      //           decoration: BoxDecoration(
+      //             color: Colors.white,
+      //             borderRadius: BorderRadius.circular(15),
+      //           ),
+      //           child: Column(
+      //             children: [
+      //               Text(
+      //                 "Title",
+      //                 style: GoogleFonts.ubuntu(
+      //                   fontSize: 20,
+      //                   fontWeight: FontWeight.bold,
+      //                   color: Colors.grey,
+      //                 ),
+      //               ),
+      //               Text(
+      //                 "Note",
+      //                 style: GoogleFonts.ubuntu(
+      //                   fontSize: 15,
+      //                   color: Colors.grey,
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Container(
+      //           height: 200,
+      //           width: 200,
+      //           decoration: BoxDecoration(
+      //             color: Colors.white,
+      //             borderRadius: BorderRadius.circular(15),
+      //           ),
+      //           child: Column(
+      //             children: [
+      //               Text(
+      //                 "Title",
+      //                 style: GoogleFonts.ubuntu(
+      //                   fontSize: 20,
+      //                   fontWeight: FontWeight.bold,
+      //                   color: Colors.grey,
+      //                 ),
+      //               ),
+      //               Text(
+      //                 "Note",
+      //                 style: GoogleFonts.ubuntu(
+      //                   fontSize: 15,
+      //                   color: Colors.grey,
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       backgroundColor: Colors.teal,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed('add_note_page');
+        },
         child: const Icon(
           Icons.add,
         ),
