@@ -90,18 +90,37 @@ class _UpdatePageState extends State<UpdatePage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () async {
-              await FirestoreHelper.firestoreHelper
-                  .deleteRecords(id: widget.id);
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Are you sure?'),
+                  content: const Text(
+                      'This action will permanently delete this data'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        await FirestoreHelper.firestoreHelper
+                            .deleteRecords(id: widget.id);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Record Deleted Successfully..."),
-                  backgroundColor: Colors.redAccent,
-                  behavior: SnackBarBehavior.floating,
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Record Deleted Successfully..."),
+                            backgroundColor: Colors.redAccent,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                        Navigator.of(context).pushReplacementNamed('note_page');
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ],
                 ),
               );
-              Navigator.pop(context);
             },
             icon: const Icon(Icons.delete),
             color: Colors.white,

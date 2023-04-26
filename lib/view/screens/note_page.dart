@@ -17,6 +17,7 @@ class _NotePageState extends State<NotePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
