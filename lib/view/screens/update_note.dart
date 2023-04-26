@@ -88,6 +88,25 @@ class _UpdatePageState extends State<UpdatePage> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await FirestoreHelper.firestoreHelper
+                  .deleteRecords(id: widget.id);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Record Deleted Successfully..."),
+                  backgroundColor: Colors.redAccent,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.delete),
+            color: Colors.white,
+          )
+        ],
       ),
       body: Form(
         key: updateNoteKey,
